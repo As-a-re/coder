@@ -1,40 +1,53 @@
 import 'package:flutter/material.dart';
 
-void main(){
+import 'landing_page.dart';
+import 'login_screen.dart';
+import 'splash_screen.dart';
+
+void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp ({super.key});
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Homepage',
+      title: 'Servify',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+            textStyle: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Homepage'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/landing': (context) => const LandingPage(),
+        '/login': (context) => const LoginScreen(),
+      },
+      builder: (context, child) {
+        return Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/logo.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
   }
 }
-
-class MyHomePage extends StatelessWidget {
-            const MyHomePage ({super.key, required this.title});
-            final String title;
-            
-              @override
-              Widget build(BuildContext context) {
-                    return Scaffold(
-                      appBar: AppBar(title: const Text('Homepage'),),
-                      body: Center(
-                        child: Text(
-                          'Welcome to the Homepage',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
-                    );
-              }
-      }
-      
