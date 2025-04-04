@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'landing_page.dart';
 import 'login_screen.dart';
 import 'splash_screen.dart';
+import 'signup_screen.dart';
+import 'home_screen.dart';
+import 'help_feedback_screen.dart';
+import 'history_screen.dart';
+import 'settings_screen.dart';
+import 'topic_details.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Servify',
+      title: 'TrueWord',
       theme: ThemeData(
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -36,12 +42,18 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/landing': (context) => const LandingPage(),
         '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/settings': (context) => const SettingsScreen(),
+        '/history': (context) => const HistoryScreen(),
+        '/help_feedback': (context) => const HelpFeedbackScreen(),
+        '/topic_details': (context) => TopicDetailsScreen(topic: '',),
       },
       builder: (context, child) {
         return Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/logo.png'),
+              image: AssetImage('images/bg1.jpg'),
               fit: BoxFit.cover,
             ),
           ),

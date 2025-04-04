@@ -1,236 +1,240 @@
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 0.5,
+          color: Color(0xFF2C3E50),
+        ),
+      ),
+    );
+  }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-  final List<Widget> _screens = [
-    const ProductsPage(),
-    const ServicesPage(),
-    const ProfilePage(),
-  ];
+  Widget _buildFeatureCard(String feature) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.check_circle_outline,
+              color: Colors.orange,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              feature,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Color(0xFF2C3E50),
+                height: 1.5,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContactCard({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    VoidCallback? onTap,
+  }) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.withOpacity(0.1)),
+      ),
+      child: ListTile(
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: iconColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, color: iconColor),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 14,
+          ),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFAFAFA),
       appBar: AppBar(
-        title: const Text('Servify'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context, 
-                '/login', 
-                (route) => false
-              );
-            },
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: const Text(
+          'About Us',
+          style: TextStyle(
+            color: Color(0xFF2C3E50),
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF2C3E50)),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inventory),
-            label: 'Products',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ProductsPage extends StatelessWidget {
-  const ProductsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(10),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: _products.length,
-      itemBuilder: (context, index) {
-        return _buildProductCard(context, _products[index]);
-      },
-    );
-  }
-
-  Widget _buildProductCard(BuildContext context, Product product) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
+        padding: const EdgeInsets.all(20.0),
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(10),
+          // About Section
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.orange.shade400,
+                  Colors.orange.shade300,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Image.network(
-              product.imageUrl,
-              height: 150,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey[300],
-                  height: 150,
-                  child: const Center(
-                    child: Icon(Icons.broken_image, color: Colors.grey),
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  product.name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  '\$${product.price.toStringAsFixed(2)}',
+                  'The Word',
                   style: TextStyle(
-                    color: Colors.green[700],
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 1,
                   ),
                 ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Added ${product.name} to cart'),
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                SizedBox(height: 16),
+                Text(
+                  'The Word is an app designed to help you know and understand various concepts in the Bible explanatively. Our goal is to provide a seamless experience for users to get to know, understand, and appreciate the various concepts in the Bible with ease.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    height: 1.6,
                   ),
-                  child: const Text('Add to Cart'),
                 ),
               ],
             ),
           ),
+
+          // Features Section
+          _buildSectionTitle('Features'),
+          _buildFeatureCard('Explore a wide range of topics and concepts'),
+          _buildFeatureCard('Add topics to your favourite sections purchases easily'),
+          _buildFeatureCard('Manage your profile and view your order history'),
+          _buildFeatureCard('Contact us through various social media platforms'),
+
+          // Contact Section
+          _buildSectionTitle('Contact Us'),
+          _buildContactCard(
+            icon: Icons.phone,
+            iconColor: Colors.green,
+            title: 'Phone',
+            subtitle: '+1 234 567 890',
+            onTap: () {},
+          ),
+          _buildContactCard(
+            icon: Icons.email,
+            iconColor: Colors.red,
+            title: 'Email',
+            subtitle: 'contact@TheWord.com',
+            onTap: () {},
+          ),
+          _buildContactCard(
+            icon: Icons.location_on,
+            iconColor: Colors.blue,
+            title: 'Address',
+            subtitle: '1234 Street Name, City, Country',
+            onTap: () {},
+          ),
+
+          // Social Media Section
+          _buildSectionTitle('Connect With Us'),
+          _buildContactCard(
+            icon: Icons.facebook,
+            iconColor: const Color(0xFF1877F2),
+            title: 'Facebook',
+            subtitle: 'facebook.com/TheWord',
+            onTap: () {},
+          ),
+          _buildContactCard(
+            icon: Icons.message,
+            iconColor: const Color(0xFF1DA1F2),
+            title: 'Twitter',
+            subtitle: 'twitter.com/TheWord',
+            onTap: () {},
+          ),
+          _buildContactCard(
+            icon: Icons.camera_alt,
+            iconColor: const Color(0xFFE4405F),
+            title: 'Instagram',
+            subtitle: 'instagram.com/TheWord',
+            onTap: () {},
+          ),
+          _buildContactCard(
+            icon: Icons.play_circle_filled,
+            iconColor: const Color(0xFFFF0000),
+            title: 'YouTube',
+            subtitle: 'youtube.com/TheWord',
+            onTap: () {},
+          ),
         ],
       ),
     );
   }
 }
-
-class ServicesPage extends StatelessWidget {
-  const ServicesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Services Page', style: TextStyle(fontSize: 24)),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Profile Page', style: TextStyle(fontSize: 24)),
-    );
-  }
-}
-
-// Product model class
-class Product {
-  final String id;
-  final String name;
-  final double price;
-  final String imageUrl;
-
-  const Product({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.imageUrl,
-  });
-}
-
-// Sample product data
-final List<Product> _products = [
-  const Product(
-    id: '1',
-    name: 'Wireless Headphones',
-    price: 99.99,
-    imageUrl: 'assets\bg2.jpg',
-  ),
-  const Product(
-    id: '2',
-    name: 'Smart Watch',
-    price: 199.99,
-    imageUrl: 'assets\bg2.jpg',
-  ),
-  const Product(
-    id: '3',
-    name: 'Portable Bluetooth Speaker',
-    price: 79.99,
-    imageUrl: 'assets\bg2.jpg',
-  ),
-  const Product(
-    id: '4',
-    name: 'Wireless Charger',
-    price: 49.99,
-    imageUrl: 'assets\bg2.jpg',
-  ),
-  const Product(
-    id: '5',
-    name: 'Noise Cancelling Earbuds',
-    price: 149.99,
-    imageUrl: 'assets\bg2.jpg',
-  ),
-  const Product(
-    id: '6',
-    name: 'Fitness Tracker',
-    price: 89.99,
-    imageUrl: 'assets\bg2.jpg',
-  ),
-];
